@@ -1,0 +1,143 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+
+option csharp_namespace = "UserProto.Service";
+
+import "google/api/annotations.proto";
+
+// User Api
+service UserProtoService { 
+	// Create new user
+	rpc CreateUser(CreateUserRequest) returns (UserResponseMessage) {
+		option (google.api.http) = {
+			post: "/api/user/create-user",
+			body: "*"
+		};
+	}
+
+	// Modify infomation user selected
+	rpc UpdateUser(UpdateUserRequest) returns (UserResponseMessage) {
+		option (google.api.http) = {
+			put: "/api/user/update-user",
+			body: "*"
+		};
+	}
+
+	rpc GetUser(UserRequest) returns (UserResponseMessage) {
+		option (google.api.http) = {
+			get: "/api/user/get-user"
+		};
+	}
+	rpc DeleteUser(UserRequest) returns (UserResponseMessage) {
+		option (google.api.http) = {
+			delete: "/api/user/delete-user"
+		};
+	}
+	rpc GetUsers(UsersRequest) returns (ListUserResponseMessage) {
+		option (google.api.http) = {
+			get: "/api/user/get-users"
+		};
+	}
+	rpc UserPermission(UserPermissionRequest) returns (UserResponseMessage) {
+		option (google.api.http) = {
+			post: "/api/user/user-permission",
+			body: "*"
+		};
+	}
+	rpc GetUsersInRole(GetUsersInRoleRequest) returns (ListUserResponseMessage) {
+		option (google.api.http) = {
+			get: "/api/user/users-in-role",
+			
+		};
+	}
+}
+
+message UsersRequest { 
+	int32 PageIndex = 1;
+	int32 PageSize = 2;
+	google.protobuf.StringValue FirstName = 3;
+	google.protobuf.StringValue LastName = 4;
+	google.protobuf.StringValue UserName = 5; 
+	google.protobuf.StringValue Email = 6;
+	google.protobuf.StringValue Phone = 7;
+	google.protobuf.StringValue PeopleId = 8;
+	google.protobuf.StringValue DateOfBirth = 9;
+}
+
+message CreateUserRequest {
+	string FirstName = 1;
+	string LastName = 2;
+	string UserName = 3;
+	string Password = 4;
+	google.protobuf.StringValue Email = 5;
+	google.protobuf.StringValue Phone = 6;
+	google.protobuf.StringValue DateOfBirth = 7;
+	google.protobuf.StringValue PeopleId = 8;
+}
+
+message UpdateUserRequest {
+	string Id = 1;
+	string FirstName = 2;
+	string LastName = 3;
+	google.protobuf.StringValue Email = 4;
+	google.protobuf.StringValue Phone = 5;
+	google.protobuf.StringValue DateOfBirth = 6;
+	google.protobuf.StringValue PeopleId = 7;
+	int32 status = 8;
+}
+
+message UserRequest {
+	google.protobuf.StringValue Id = 1;
+	google.protobuf.StringValue UserName = 2;
+	google.protobuf.StringValue PeopleId = 3;
+}
+
+message UserPermissionRequest {
+	string UserId = 1;
+	string PermissionId = 2;
+	bool IsAdditional = 3;
+}
+
+message GetUsersInRoleRequest { 
+	int32 PageIndex = 1;
+	int32 PageSize = 2;
+	string RoleId = 3;
+	google.protobuf.StringValue FirstName = 4;
+	google.protobuf.StringValue LastName = 5;
+	google.protobuf.StringValue Email = 6;
+	google.protobuf.StringValue UserName = 7;
+	google.protobuf.StringValue Phone = 8;
+	google.protobuf.StringValue PeopleId = 9;
+	google.protobuf.Int32Value Status = 10;
+
+}
+
+message UserResponse {
+	string Id = 1;
+	string FirstName = 2;
+	string LastName = 3;
+	string UserName = 4;
+	google.protobuf.StringValue Email = 5;
+	google.protobuf.StringValue Phone = 6;
+	google.protobuf.StringValue DateOfBirth = 7;
+	google.protobuf.StringValue PeopleId = 8;
+	int32 status = 9;
+}
+
+message UserResponseMessage {
+	int32 StatusCode = 1;
+	bool Succeeded = 2;
+	google.protobuf.StringValue Message = 3;
+	UserResponse Data = 4;
+}
+
+message ListUserResponseMessage {
+	int32 PageIndex = 1;
+	int32 PageSize = 2;
+	int32 TotalItems = 3;
+	int32 TotalPage = 4;
+	repeated UserResponse Data = 5;
+	int32 StatusCode = 6;
+	bool Succeeded = 7;
+}

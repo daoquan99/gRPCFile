@@ -1,0 +1,71 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+
+option csharp_namespace = "RoleProto.Service";
+
+service RoleProtoService {
+    rpc CreateRole(CreateRoleRequest) returns (RoleResponseMessage) {}
+    rpc UpdateRole(UpdateRoleRequest) returns (RoleResponseMessage) {}
+    rpc GetRole(RoleInfoRequest) returns (RoleResponseMessage) {}
+    rpc GetRoles(RoleRequest) returns (ListRoleResponseMessage) {}
+    rpc DeleteRole(RoleInfoRequest) returns (RoleResponseMessage) {}
+    rpc UserRole(UserRoleRequest) returns (RoleResponseMessage) {}
+    rpc RolePermission(RolePermissionRequest) returns (RoleResponseMessage) {}
+}
+
+message RoleRequest {
+    int32 pageIndex = 1;
+    int32 PageSize = 2;
+    string RoleName = 3;
+    google.protobuf.Int32Value status = 4;
+}
+
+message RoleInfoRequest {
+    string Id = 1;
+}
+
+message CreateRoleRequest {
+    string RoleName = 1;
+}
+
+message UpdateRoleRequest {
+    string Id = 1;
+    string RoleName = 2;
+    int32 Status = 3;
+}
+
+message UserRoleRequest {
+    string RoleId = 1;
+    string UserId = 2;
+    bool IsAdditional = 3;
+}
+
+message RolePermissionRequest {
+    string RoleId = 1;
+    string PermissionId = 2;
+    bool IsAdditional = 3;
+}
+
+message RoleResponse {
+    string Id = 1;
+    string RoleName = 2;
+    int32 Status = 3;
+}
+
+message RoleResponseMessage {
+    int32 StatusCode = 1;
+	bool Succeeded = 2;
+	google.protobuf.StringValue Message = 3;
+    RoleResponse Data = 4;
+}
+
+message ListRoleResponseMessage {
+    int32 PageIndex = 1;
+	int32 PageSize = 2;
+	int32 TotalItems = 3;
+	int32 TotalPage = 4;
+	repeated RoleResponse Data = 5;
+	int32 StatusCode = 6;
+	bool Succeeded = 7; 
+}

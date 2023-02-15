@@ -1,0 +1,66 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+
+option csharp_namespace = "AuthProto.Service";
+
+import "Protos/user.proto";
+import "Protos/permission.proto";
+
+import "google/api/annotations.proto";
+
+service AuthProtoService { 
+	rpc Login(LoginRequest) returns (AuthResponseMessage) {
+		option (google.api.http) = {
+			post: "/api/auth/login",
+			body: "*"
+		};
+	}
+	rpc RefreshToken(RefreshTokenRequest) returns (AuthResponseMessage) {
+		option (google.api.http) = {
+			post: "/api/auth/refresh-token",
+			body: "*"
+		};
+	}
+
+	rpc Logout(RefreshTokenRequest) returns (LogoutResponseMessage) {
+		option (google.api.http) = {
+			post: "/api/auth/logout",
+			body: "*"
+		};
+	}
+}
+
+message LoginRequest { 
+	google.protobuf.StringValue UserName = 1; 
+	google.protobuf.StringValue Password = 2; 
+}
+
+message RefreshTokenRequest{
+	google.protobuf.StringValue RefreshToken = 1;
+}
+
+message TokenResponse {
+	string AccessToken = 1;
+	string RefreshToken = 2;
+	int64 Expired = 3;
+}
+
+message AuthResponse {
+	TokenResponse Token = 1;
+	UserResponse UserInfo = 2;
+	repeated PermissionResponse Permissions = 3;
+}
+
+message AuthResponseMessage
+{
+	int32 StatusCode = 1;
+	bool Succeeded = 2;
+	string Message = 3;
+	AuthResponse Data = 4;
+}
+
+message LogoutResponseMessage {
+	int32 StatusCode = 1;
+	bool Succeeded = 2; 
+}

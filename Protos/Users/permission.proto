@@ -1,0 +1,106 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+
+option csharp_namespace = "PermissionProto.Service";
+
+import "google/api/annotations.proto";
+
+service PermissionProtoService {  
+
+    rpc CreatePermission(CreatePermissionRequest) returns (PermissionResponseMessage) {
+        option (google.api.http) = {
+			post: "/api/permission/create-permission",
+			body: "*"
+		};
+    }
+
+    rpc ChangeStatusPermission(ChangeStatusPermissionRequest) returns (PermissionResponseMessage) {
+        option (google.api.http) = {
+			post: "/api/permission/change-status",
+			body: "*"
+		};
+    }
+    rpc GetPermissions(PermissionRequest) returns (ListPermissionResponseMessage) {
+        option (google.api.http) = {
+			get: "/api/permission/get-permissions"
+		};
+    }
+    rpc GetPermissionsInRole(PermissionInRoleRequest) returns (ListPermissionResponseMessage) {
+        option (google.api.http) = {
+			get: "/api/permission/get-permissions-in-role"
+		};
+    }
+    rpc GetPermissionsInUser(PermissionInUserRequest) returns (ListPermissionResponseMessage) {
+        option (google.api.http) = {
+			post: "/api/permission/get-permissions-in-user",
+			body: "*"
+		};
+    }
+}
+
+message CreatePermissionRequest {
+    string PermissionName = 3;
+    string PermissionCode = 4;
+    google.protobuf.StringValue PermissionDescription = 5;
+}
+
+message PermissionRequest {
+    int32 PageIndex = 1;
+    int32 PageSize = 2;
+    google.protobuf.StringValue PermissionName = 3;
+    google.protobuf.StringValue PermissionCode = 4;
+    google.protobuf.StringValue PermissionDescription = 5;
+    google.protobuf.Int32Value Status = 6;
+}
+
+message ChangeStatusPermissionRequest {
+    string Id = 1;
+    int32 Status = 2;
+}
+
+message PermissionInUserRequest {
+    int32 PageIndex = 1;
+    int32 PageSize = 2;
+    string UserId = 3;
+    google.protobuf.StringValue PermissionName = 4;
+    google.protobuf.StringValue PermissionCode = 5;
+    google.protobuf.StringValue PermissionDescription = 6;
+    google.protobuf.Int32Value Status = 7;
+}
+
+message PermissionInRoleRequest {
+    int32 PageIndex = 1;
+    int32 PageSize = 2;
+    string RoleId = 3;
+    google.protobuf.StringValue PermissionName = 4;
+    google.protobuf.StringValue PermissionCode = 5;
+    google.protobuf.StringValue PermissionDescription = 6;
+    google.protobuf.Int32Value Status = 7;
+}
+
+message PermissionResponse {
+    string Id = 1;
+    string PermissionCode = 2;
+    string PermissionName = 3;
+    google.protobuf.StringValue PermissionDescription = 4;
+    int32 Status = 5;
+    bool IsActive = 6; 
+}
+
+message PermissionResponseMessage {
+    int32 StatusCode = 1;
+	bool Succeeded = 2;
+	google.protobuf.StringValue Message = 3;
+    PermissionResponse Data = 4;
+}
+
+message ListPermissionResponseMessage {
+    int32 PageIndex = 1;
+	int32 PageSize = 2;
+	int32 TotalItems = 3;
+	int32 TotalPage = 4;
+	repeated PermissionResponse Data = 5;
+	int32 StatusCode = 6;
+	bool Succeeded = 7; 
+}
